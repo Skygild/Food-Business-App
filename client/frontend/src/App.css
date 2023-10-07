@@ -17,3 +17,10 @@ header .buttons {
   align-items: center;
   height: 3em;
 }
+header .buttons button {
+  margin: 0 1em;
+  border: 1px solid black;
+  border-radius: 6px;
+  height: 2em;
+  background-color: white;
+}
