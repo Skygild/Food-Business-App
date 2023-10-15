@@ -1,9 +1,9 @@
 const LocalStrategy = require("passport-local").Strategy;
-const logIn = require("../controllers/userController");
+const { logIn } = require("../controllers/userController");
 const User = require("../model/UserModel");
 
 const passportConfig = (passport) => {
-  passport.use(new LocalStrategy({ usernameField: "email", passwordField: "password" }), logIn);
+  passport.use(new LocalStrategy({ usernameField: "email", passwordField: "password" }, logIn));
 
   passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -19,4 +19,4 @@ const passportConfig = (passport) => {
   });
 };
 
-module.exports = passportConfig;
+module.exports = { passportConfig };

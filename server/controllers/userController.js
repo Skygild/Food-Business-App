@@ -4,19 +4,25 @@ const bcrypt = require("bcrypt");
 const signUp = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const securedUser = { email, password: hashedPassword };
-    const create = await User.create(securedUser);
 
-    return res.status(201).json({ create });
+    if (!email || !password) {
+      return res.status(401).send("Empty User Information");
+    } else if (password.length <= 5) {
+      return res.status(401).send("Password length minimum is 5");
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = { email, password: hashedPassword };
+    const create = await User.create(newUser);
+
+    return res.status(200).send(create);
   } catch (error) {
-    return console.log(error);
+    return res.status(400).json({ message: error });
   }
 };
 
 const logIn = async (email, password, done) => {
   try {
-    const user = User.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return done(null, false, { message: "Wrong Email" });

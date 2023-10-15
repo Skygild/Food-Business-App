@@ -9,7 +9,7 @@ const User = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    min: 6,
+    minLength: 5,
   },
   orders: [{ type: String }],
   status: {
