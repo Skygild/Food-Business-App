@@ -39,4 +39,14 @@ const logIn = async (email, password, done) => {
   }
 };
 
-module.exports = { signUp, logIn };
+const userOrder = async (req, res) => {
+  try {
+    const { orders } = req.body;
+    const addOrders = await User.findByIdAndUpdate({ _id: req.user._id }, { $push: { orders: orders }, haveOrder: true, status: "Prepairing" }, { new: true });
+    return res.status(200).json(addOrders);
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+module.exports = { signUp, logIn, userOrder };
