@@ -24,6 +24,9 @@ passportConfig(passport);
 app.use(passport.session());
 
 app.use("/user", userRouter);
+app.use("/home", (req, res) => {
+  res.send("Welcome in home page");
+});
 
 //Start server
 app.listen(process.env.PORT, () => {
