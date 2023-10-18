@@ -7,7 +7,7 @@ const signUp = async (req, res) => {
 
     if (!email || !password) {
       return res.status(401).send("Empty User Information");
-    } else if (password.length <= 5) {
+    } else if (password.length < 5) {
       return res.status(401).send("Password length minimum is 5");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,7 +42,8 @@ const logIn = async (email, password, done) => {
 const userOrder = async (req, res) => {
   try {
     const { orders } = req.body;
-    const addOrders = await User.findByIdAndUpdate({ _id: req.user._id }, { $push: { orders: orders }, haveOrder: true, status: "Prepairing" }, { new: true });
+    const addOrders = await User.findByIdAndUpdate({ _id: req.user._id }, { $push: { orders: orders }, $set: { haveOrder: true, status: "Prepairing" } }, { new: true });
+
     return res.status(200).json(addOrders);
   } catch (error) {
     return console.log(error);

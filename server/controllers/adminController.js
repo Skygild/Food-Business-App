@@ -8,37 +8,36 @@ const createProduct = async (req, res) => {
     const product = await Product.create(food);
     return res.status(200).json(product);
   } catch (error) {
-    return console.log(error);
+    return res.status(400).send(error);
   }
 };
 
 const updateProduct = async (req, res) => {
   try {
-    if (req.user.role != "admin") {
-      const product = { full_name: req.param.full_name };
-      const update = req.body;
+    if (req.user.role == "admin") {
+      const id = req.params.id;
 
-      const food = await Product.findOneAndUpdate(product, update, { new: true });
+      const food = await Product.findOneAndUpdate({ _id: id }, req.body, { new: true });
 
       return res.status(200).json(food);
     }
     res.status(404).send("Not an admin!");
   } catch (error) {
-    return console.log(error);
+    return res.status(400).send(error);
   }
 };
 
 const updateStatus = async (req, res) => {
   try {
-    const id = req.param.id;
+    const id = req.params.id;
     const { status } = req.body;
 
     if (status == "Delivered") {
-      const update = await User.findByIdAndUpdate({ _id: id }, { status, haveOrder: true }, { new: true });
+      const update = await User.findOneAndUpdate({ _id: id }, { status, $set: { haveOrder: false } }, { new: true });
       return res.status(200).json(update);
     }
 
-    const update = await User.findByIdAndUpdate({ _id: id }, status, { new: true });
+    const update = await User.findOneAndUpdate({ _id: id }, req.body, { new: true });
 
     return res.status(200).json(update);
   } catch (error) {

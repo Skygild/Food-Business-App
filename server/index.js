@@ -7,6 +7,9 @@ const connecDB = require("./db/connectDB");
 const { passportConfig } = require("./config/passportConfig");
 const userRouter = require("./routes/userRoutes");
 const session = require("express-session");
+const { checkAdmin, checkAuth } = require("./authentication/auth");
+const adminRoute = require("./routes/adminRoutes");
+const authUsersRoutes = require("./routes/authUsersRoutes");
 
 //express middlewares
 app.use(express.json());
@@ -24,8 +27,15 @@ passportConfig(passport);
 app.use(passport.session());
 
 app.use("/user", userRouter);
-app.use("/home", (req, res) => {
-  res.send("Welcome in home page");
+app.use("/admin", checkAdmin, adminRoute);
+app.use("/home", checkAuth, authUsersRoutes);
+
+app.get("/home", async (req, res) => {
+  try {
+    return res.status(200).send("Welcome to home page. Order Now!");
+  } catch (error) {
+    return console.log(error);
+  }
 });
 
 //Start server

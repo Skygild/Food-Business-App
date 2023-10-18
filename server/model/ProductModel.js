@@ -10,7 +10,7 @@ const Product = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: Image,
+    type: String,
     required: true,
   },
   food_text: {

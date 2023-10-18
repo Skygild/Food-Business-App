@@ -20,6 +20,10 @@ const User = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  role: {
+    type: String,
+    default: "customers",
+  },
 });
 
 module.exports = mongoose.model("User", User);
